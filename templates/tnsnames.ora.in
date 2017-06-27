@@ -1,0 +1,13 @@
+ORACLEDB =
+ ( DESCRIPTION =
+  (ADDRESS_LIST =
+    (ADDRESS =
+      (PROTOCOL = TCP)
+      (Host = {{ORACLE_HOST}})
+      (Port = {{ORACLE_PORT}})
+    )
+  )
+ (CONNECT_DATA = (SERVICE_NAME = {{ORACLE_SERVICE}})
+ )
+)
+

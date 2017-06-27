@@ -1,0 +1,12 @@
+[oracle]
+Description = Oracle ODBC driver 
+Driver = /usr/lib/oracle/12.2/client64/lib/libsqora.so.12.1
+FileUsage = 1
+Driver Logging = 7
+
+[odbc]
+Trace = No
+Tracefile = /tmp/oracletrace
+ForceTrace = No
+Pooling = No
+DEBUG = 0

@@ -1,0 +1,6 @@
+[oracle]
+Driver = oracle
+DSN = odbc
+ServerName = ORACLEDB
+UserID = {{ORACLE_USER}}
+Password = {{ORACLE_PASSWORD}}

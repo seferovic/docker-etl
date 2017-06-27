@@ -1,0 +1,12 @@
+#!/bin/sh
+for f in /etc/oracle/tnsnames.ora /etc/odbcinst.ini /etc/odbc.ini ; do
+    sed \
+        -e "s/{{ORACLE_SERVICE}}/$ORACLE_SERVICE/g"   \
+        -e "s/{{ORACLE_USER}}/$ORACLE_USER/g"         \
+        -e "s/{{ORACLE_PASSWORD}}/$ORACLE_PASSWORD/g" \
+        -e "s/{{ORACLE_HOST}}/$ORACLE_HOST/g"         \
+        -e "s/{{ORACLE_PORT}}/$ORACLE_PORT/g"         \
+        < ${f}.in > $f
+done
+# FIXME: This should start the ETL program in the end
+exec /bin/bash

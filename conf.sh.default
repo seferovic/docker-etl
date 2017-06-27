@@ -10,8 +10,8 @@ main() {
     #set_volume_root
     set_image_and_container_name
     set_users
-    #set_buildargs
-    #set_run_args
+    set_buildargs
+    set_run_args
     #set_network
     set_vol_mapping
     #enable_x11_client
@@ -25,8 +25,8 @@ main() {
 
 
 set_image_and_container_name() {
-    PROJSHORT='py3_generic'
-    export IMAGENAME="rhoerbe/$PROJSHORT"  # [a-z_0-9]
+    PROJSHORT='etl'
+    export IMAGENAME="rschlatterbeck/$PROJSHORT"  # [a-z_0-9]
     export CONTAINERNAME="$PROJSHORT"
 }
 
@@ -42,7 +42,14 @@ set_buildargs() {
 
 
 set_run_args() {
-    export ENVSETTINGS=""
+    export ENVSETTINGS="
+        --env=ORACLE_SERVICE=PH08.brz \
+        --env=ORACLE_USER=addme \
+        --env=ORACLE_PASSWORD=strenggeheim \
+        --env=ORACLE_HOST=172.18.77.3 \
+        --env=ORACLE_PORT=1521 \
+        --env=TWO_TASK=//172.18.77.3:1521/listener \
+        "
     export STARTCMD='/bin/bash'  # unset or blank to use image default
 }
 

@@ -1,0 +1,84 @@
+#!/usr/bin/env bash
+
+# settings for docker build, run and exec
+
+main() {
+    SCRIPTDIR=$(cd $(dirname $BASH_SOURCE[0]) && pwd)
+    source $SCRIPTDIR/dscripts/conf_lib.sh  # load library functions
+
+    init_sudo
+    #set_volume_root
+    set_image_and_container_name
+    set_users
+    set_buildargs
+    set_run_args
+    #set_network
+    set_vol_mapping
+    #enable_x11_client
+    #enable_pkcs11
+    #enable_sshd()     # usually used only for debugging - requires installed sshd in image
+}
+
+
+#set_volume_root() {
+#}
+
+
+set_image_and_container_name() {
+    PROJSHORT='etl'
+    export IMAGENAME="rschlatterbeck/$PROJSHORT"  # [a-z_0-9]
+    export CONTAINERNAME="$PROJSHORT"
+}
+
+
+set_users() {
+    export START_AS_ROOT=      # 'True' (e.g. for apache to fall back to www user)
+}
+
+
+set_buildargs() {
+    export BUILDARGS="--build-arg=http_proxy=http://proxy.lfrz.at:8080 \
+    --build-arg=HTTP_PROXY=http://proxy.lfrz.at:8080 \
+    --build-arg=ftp_proxy=http://proxy.lfrz.at:8080 \
+    --build-arg=FTP_PROXY=http://proxy.lfrz.at:8080 \
+    --build-arg=https_proxy=http://proxy.lfrz.at:8080 \
+    --build-arg=HTTPS_PROXY=http://proxy.lfrz.at:8080 \
+    --build-arg=no_proxy=.lfrz.gv.at,.lfrz.at,.vie01.local \
+    --build-arg=NO_PROXY=.lfrz.gv.at,.lfrz.at,.vie01.local \
+    "
+}
+
+
+set_run_args() {
+    export ENVSETTINGS="\
+    --env=http_proxy=http://proxy.lfrz.at:8080 \
+    --env=HTTP_PROXY=http://proxy.lfrz.at:8080 \
+    --env=ftp_proxy=http://proxy.lfrz.at:8080 \
+    --env=FTP_PROXY=http://proxy.lfrz.at:8080 \
+    --env=https_proxy=http://proxy.lfrz.at:8080 \
+    --env=HTTPS_PROXY=http://proxy.lfrz.at:8080 \
+    --env=no_proxy=.lfrz.gv.at,.lfrz.at,.vie01.local \
+    --env=NO_PROXY=.lfrz.gv.at,.lfrz.at,.vie01.local \
+    --env=ORACLE_SERVICE=PH08.brz \
+    --env=ORACLE_USER=addme \
+    --env=ORACLE_PASSWORD=strenggeheim \
+    --env=ORACLE_HOST=172.18.77.3 \
+    --env=ORACLE_PORT=1521 \
+    --env=TWO_TASK=//172.18.77.3:1521/listener \
+    "
+    export STARTCMD='/bin/bash'  # unset or blank to use image default
+}
+
+
+#set_network() {
+#}
+
+
+set_vol_mapping() {
+    VOLLIST=''
+    VOLMAPPING=''
+    # map_host_directory "$PWD" '/host_cd/' 'rw'  # on target systems with dockerd --selinux-enable map dedicated volume
+}
+
+
+main
