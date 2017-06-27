@@ -9,12 +9,14 @@ RUN yum -y update \
  && yum -y install unixODBC pyodbc libaio \
  && curl https://bootstrap.pypa.io/get-pip.py | python3.4
 
-# FIXME: Use a private repo where the .rpm files for oracle are kept
-COPY oracle-instantclient12.2-basic-12.2.0.1.0-1.x86_64.rpm \
-     oracle-instantclient12.2-odbc-12.2.0.1.0-1.x86_64.rpm  \
-     /tmp/
+ARG BUILD_IP
 
-RUN rpm -ivh /tmp/oracle-instantclient12.2-basic-12.2.0.1.0-1.x86_64.rpm \
+RUN \
+ for f in oracle-instantclient12.2-basic-12.2.0.1.0-1.x86_64.rpm \
+  oracle-instantclient12.2-odbc-12.2.0.1.0-1.x86_64.rpm ; do \
+    curl -s -o /tmp/$f http://$BUILD_IP:8000/$f ; \
+ done \
+ && rpm -ivh /tmp/oracle-instantclient12.2-basic-12.2.0.1.0-1.x86_64.rpm \
  && rpm -ivh /tmp/oracle-instantclient12.2-odbc-12.2.0.1.0-1.x86_64.rpm  \
  && rm -f /tmp/oracle* \
  && mkdir /etc/oracle  \

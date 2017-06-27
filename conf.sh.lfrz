@@ -37,7 +37,10 @@ set_users() {
 
 
 set_buildargs() {
-    export BUILDARGS="--build-arg=http_proxy=http://proxy.lfrz.at:8080 \
+    BUILD_IP=$(ip address ls docker0 | grep -w inet | cut -d ' ' -f6 \
+               | cut -d/ -f1)
+    export BUILDARGS="--build-arg=BUILD_IP=$BUILD_IP \
+    --build-arg=http_proxy=http://proxy.lfrz.at:8080 \
     --build-arg=HTTP_PROXY=http://proxy.lfrz.at:8080 \
     --build-arg=ftp_proxy=http://proxy.lfrz.at:8080 \
     --build-arg=FTP_PROXY=http://proxy.lfrz.at:8080 \

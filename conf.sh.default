@@ -37,7 +37,9 @@ set_users() {
 
 
 set_buildargs() {
-    export BUILDARGS=""
+    BUILD_IP=$(ip address ls docker0 | grep -w inet | cut -d ' ' -f6 \
+               | cut -d/ -f1)
+    export BUILDARGS="--build-arg=BUILD_IP=$BUILD_IP"
 }
 
 
