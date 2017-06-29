@@ -46,8 +46,8 @@ set_buildargs() {
     --build-arg=FTP_PROXY=http://proxy.lfrz.at:8080 \
     --build-arg=https_proxy=http://proxy.lfrz.at:8080 \
     --build-arg=HTTPS_PROXY=http://proxy.lfrz.at:8080 \
-    --build-arg=no_proxy=.lfrz.gv.at,.lfrz.at,.vie01.local \
-    --build-arg=NO_PROXY=.lfrz.gv.at,.lfrz.at,.vie01.local \
+    --build-arg=no_proxy=.lfrz.gv.at,.lfrz.at,.vie01.local,172.17.0.1 \
+    --build-arg=NO_PROXY=.lfrz.gv.at,.lfrz.at,.vie01.local,172.17.0.1 \
     "
 }
 
