@@ -7,6 +7,8 @@ RUN yum -y update \
  && yum -y install epel-release \
  && yum -y install python34-devel \
  && yum -y install unixODBC pyodbc libaio \
+ && yum -y install openldap-clients \
+ && yum -y install less \
  && curl https://bootstrap.pypa.io/get-pip.py | python3.4
 
 ARG BUILD_IP
