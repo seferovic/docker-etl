@@ -6,9 +6,10 @@ MAINTAINER Ralf Schlatterbeck <rsc@runtux.com>
 RUN yum -y update \
  && yum -y install epel-release \
  && yum -y install python34-devel \
- && yum -y install unixODBC pyodbc libaio \
+ && yum -y install unixODBC libaio \
  && yum -y install openldap-clients \
  && yum -y install less \
+ && yum -y install gcc gcc-c++ unixODBC-devel \
  && curl https://bootstrap.pypa.io/get-pip.py | python3.4
 
 ARG BUILD_IP
@@ -22,7 +23,9 @@ RUN \
  && rpm -ivh /tmp/oracle-instantclient12.2-odbc-12.2.0.1.0-1.x86_64.rpm  \
  && rm -f /tmp/oracle* \
  && mkdir /etc/oracle  \
- && pip3 install ldap3
+ && pip3 install ldap3 \
+ && pip3 install pyodbc \
+ && echo "TLS_REQCERT allow" >> /etc/openldap/ldap.conf
 
 COPY templates/odbc.ini.in templates/odbcinst.ini.in /etc/
 COPY templates/startup /bin/
