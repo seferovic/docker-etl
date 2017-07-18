@@ -46,6 +46,8 @@ ENV ORACLE_HOME=/usr/lib/oracle/12.2/client64         \
     LDAP_BIND_DN=cn=admin,o=BMUKK                     \
     LDAP_BASE_DN=o=BMUKK                              \
     LDAP_USER_OU=ou=user                              \
+    PYTHONIOENCODING=utf-8:backslashreplace           \
+    NLS_LANG=GERMAN_GERMANY.AL32UTF8                  \
     DATABASE_INSTANCES=ph06:PH06.brz,ph08:PH08.brz,ph10:PH10.brz,ph15:PH15.brz
 
 
