@@ -1,13 +1,15 @@
-ORACLEDB =
+{% for DB, DBNAME in DATABASE_INSTANCES|dictsort %}
+{{ DB }} =
  ( DESCRIPTION =
   (ADDRESS_LIST =
     (ADDRESS =
       (PROTOCOL = TCP)
-      (Host = {{ORACLE_HOST}})
-      (Port = {{ORACLE_PORT}})
+      (Host = {{ ORACLE_HOST }})
+      (Port = {{ ORACLE_PORT }})
     )
   )
- (CONNECT_DATA = (SERVICE_NAME = {{ORACLE_SERVICE}})
+ (CONNECT_DATA = (SERVICE_NAME = {{ DBNAME }})
  )
 )
 
+{% endfor %}

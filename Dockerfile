@@ -8,7 +8,9 @@ RUN yum -y update \
  && yum -y install python34-devel \
  && yum -y install unixODBC libaio \
  && yum -y install openldap-clients \
- && yum -y install less \
+ && yum -y install python34-jinja2 \
+ && yum -y install postgresql-odbc \
+ && yum -y install less telnet \
  && yum -y install gcc gcc-c++ unixODBC-devel \
  && curl https://bootstrap.pypa.io/get-pip.py | python3.4
 
@@ -27,21 +29,24 @@ RUN \
  && pip3 install pyodbc \
  && echo "TLS_REQCERT allow" >> /etc/openldap/ldap.conf
 
-COPY templates/odbc.ini.in templates/odbcinst.ini.in /etc/
+COPY templates/odbc.ini.in templates/odbcinst.ini.in \
+    templates/tnsnames.ora.in /etc/templates/
 COPY templates/startup /bin/
-COPY templates/tnsnames.ora.in /etc/oracle/
 
 # Note that TWO_TASK must be consistent with ORACLE_HOST and ORACLE_PORT
 # and is required by oracle odbc
 ENV ORACLE_HOME=/usr/lib/oracle/12.2/client64         \
     LD_LIBRARY_PATH=/usr/lib/oracle/12.2/client64/lib \
     TNS_ADMIN=/etc/oracle                             \
-    ORACLE_SERVICE=PH08.brz                           \
     ORACLE_USER=addme                                 \
-    ORACLE_PASSWORD=strenggeheim                      \
     ORACLE_HOST=172.18.77.3                           \
     ORACLE_PORT=1521                                  \
-    TWO_TASK=//${ORACLE_HOST}:${ORACLE_PORT}/listener
+    TWO_TASK=//${ORACLE_HOST}:${ORACLE_PORT}/listener \
+    LDAP_URI=ldap://172.17.0.2:8389                   \
+    LDAP_BIND_DN=cn=admin,o=BMUKK                     \
+    LDAP_BASE_DN=o=BMUKK                              \
+    LDAP_USER_OU=ou=user                              \
+    DATABASE_INSTANCES=ph06:PH06.brz,ph08:PH08.brz,ph10:PH10.brz,ph15:PH15.brz
 
 
 ENV USERNAME=default  \

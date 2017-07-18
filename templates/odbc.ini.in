@@ -1,6 +1,9 @@
-[oracle]
+{% for DB in DATABASE_INSTANCES|sort %}
+[{{ DB }}]
 Driver = oracle
 DSN = odbc
-ServerName = ORACLEDB
-UserID = {{ORACLE_USER}}
-Password = {{ORACLE_PASSWORD}}
+ServerName = {{ DB }}
+UserID = {{ ORACLE_USER }}
+Password = {{ DATABASE_PASSWORDS [DB] }}
+
+{% endfor %}

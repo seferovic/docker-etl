@@ -1,12 +1,49 @@
-#!/bin/sh
-for f in /etc/oracle/tnsnames.ora /etc/odbcinst.ini /etc/odbc.ini ; do
-    sed \
-        -e "s/{{ORACLE_SERVICE}}/$ORACLE_SERVICE/g"   \
-        -e "s/{{ORACLE_USER}}/$ORACLE_USER/g"         \
-        -e "s/{{ORACLE_PASSWORD}}/$ORACLE_PASSWORD/g" \
-        -e "s/{{ORACLE_HOST}}/$ORACLE_HOST/g"         \
-        -e "s/{{ORACLE_PORT}}/$ORACLE_PORT/g"         \
-        < ${f}.in > $f
-done
+#!/usr/bin/python3
+
+import os
+from jinja2 import Environment, FileSystemLoader
+
+env = Environment \
+    ( loader        = FileSystemLoader ('/etc/templates')
+    , trim_blocks   = False
+    , lstrip_blocks = False
+    )
+
+# Fixed environment variables
+vars = 'ORACLE_USER', 'ORACLE_HOST', 'ORACLE_PORT'
+for k in vars :
+    env.globals [k] = os.environ [k]
+inst = {}
+
+# Environment-variable DATABASE_INSTANCES
+for db in os.environ ['DATABASE_INSTANCES'].split (',') :
+    k, v = (x.strip () for x in db.split (':', 1))
+    inst [k] = v
+env.globals ['DATABASE_INSTANCES'] = inst
+
+# Get passwords from /etc/passwords passed in via link-mount
+with open ('/etc/passwords', 'r') as pw :
+    for line in pw :
+        line = line.strip ()
+        if not line or line.startswith ('#') :
+            continue
+        k, v = (x.strip () for x in line.split ('=', 1))
+        if k == 'DATABASE_PASSWORDS' :
+            pws = {}
+            for pwentry in v.split (',') :
+                db, pw = (x.strip () for x in pwentry.split (':', 1))
+                pws [db] = pw
+            env.globals ['DATABASE_PASSWORDS'] = pws
+        else :
+            env.globals [k] = v
+
+files = ('/etc/oracle/tnsnames.ora', '/etc/odbcinst.ini', '/etc/odbc.ini')
+
+for fn in files :
+    tplname = os.path.basename (fn) + '.in'
+    with open (fn, 'w') as f :
+        tpl = env.get_template (tplname)
+        f.write (tpl.render ())
+
 # FIXME: This should start the ETL program in the end
-exec /bin/bash
+os.execl ('/bin/bash', 'bash')

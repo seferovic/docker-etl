@@ -62,7 +62,7 @@ set_run_args() {
 
 set_vol_mapping() {
     VOLLIST=''
-    VOLMAPPING=''
+    VOLMAPPING="-v $PWD/passwords:/etc/passwords"
     # map_host_directory "$PWD" '/host_cd/' 'rw'  # on target systems with dockerd --selinux-enable map dedicated volume
 }
 
