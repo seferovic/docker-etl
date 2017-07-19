@@ -28,6 +28,10 @@ set_image_and_container_name() {
     PROJSHORT='etl'
     export IMAGENAME="rschlatterbeck/$PROJSHORT"  # [a-z_0-9]
     export CONTAINERNAME="$PROJSHORT"
+    export DOCKER_REGISTRY=''  # empty for docker.io
+    if [[ $JENKINS_HOME ]]; then
+        export DOCKER_REGISTRY='localhost:5000'
+    fi
 }
 
 
