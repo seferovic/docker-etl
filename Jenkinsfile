@@ -2,7 +2,7 @@ pipeline {
     agent any
 
     stages {
-        stage('ETD: get remote repo') {
+        /*stage('ETD: get remote repo') {
             steps {
                 sh '''
                 echo 'hard coding git branch - TODO: move this to the jenkins git plugin'
@@ -13,7 +13,7 @@ pipeline {
                 cd ./dscripts && git checkout master && git pull && cd ..
                 '''
             }
-        }
+        }*/
         stage('ETD: docker cleanup') {
             steps {
                 sh './dscripts/manage.sh rm 2>/dev/null || true'
