@@ -1,6 +1,7 @@
 #!/usr/bin/python3
 
 import os
+import sys
 from jinja2 import Environment, FileSystemLoader
 
 env = Environment \
@@ -45,5 +46,8 @@ for fn in files :
         tpl = env.get_template (tplname)
         f.write (tpl.render ())
 
-# FIXME: This should start the ETL program in the end
-os.execl ('/bin/bash', 'bash')
+cmd = '/opt/bin/etl.py'
+if len (sys.argv) > 1 :
+    cmd = sys.argv [1]
+arg0 = os.path.basename (cmd)
+os.execl (cmd, arg0, *(argv [2:]))

@@ -32,6 +32,7 @@ RUN \
 COPY templates/odbc.ini.in templates/odbcinst.ini.in \
     templates/tnsnames.ora.in /etc/templates/
 COPY templates/startup /bin/
+COPY py-etl /opt/bin/
 
 # Note that TWO_TASK must be consistent with ORACLE_HOST and ORACLE_PORT
 # and is required by oracle odbc
@@ -60,3 +61,4 @@ RUN groupadd --non-unique -g $CONTAINERGID $USERNAME \
 #USER $USERNAME
 
 ENTRYPOINT [ "/bin/startup" ]
+CMD [ "/opt/bin/etl.py", "etl" ]

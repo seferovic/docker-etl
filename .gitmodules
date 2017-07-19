@@ -1,3 +1,6 @@
 [submodule "dscripts"]
 	path = dscripts
 	url = https://github.com/identinetics/dscripts.git
+[submodule "py-etl"]
+	path = py-etl
+	url = https://github.com/edushare-at/py-etl
