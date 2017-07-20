@@ -50,4 +50,4 @@ cmd = '/opt/bin/etl.py'
 if len (sys.argv) > 1 :
     cmd = sys.argv [1]
 arg0 = os.path.basename (cmd)
-os.execl (cmd, arg0, *(argv [2:]))
+os.execl (cmd, arg0, *(sys.argv [2:]))
