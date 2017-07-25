@@ -38,7 +38,7 @@ _set_buildargs() {
 }
 
 
-set_run_args() {
+_set_run_args() {
     export ENVSETTINGS="
     --env=ORACLE_USER=addme \
     --env=ORACLE_HOST=172.18.77.3 \
@@ -55,7 +55,13 @@ set_run_args() {
 }
 
 
+create_intercontainer_network() {
+    export NETWORKSETTINGS=""
+}
+
+
 setup_vol_mapping() {
+    mode=$1  # create (used by run.sh)/list (used by manage.sh)
     VOLLIST=''
     VOLMAPPING="-v $PWD/passwords:/etc/passwords"
 }
