@@ -43,7 +43,7 @@ ENV ORACLE_HOME=/usr/lib/oracle/12.2/client64         \
     ORACLE_HOST=172.18.77.3                           \
     ORACLE_PORT=1521                                  \
     TWO_TASK=//${ORACLE_HOST}:${ORACLE_PORT}/listener \
-    LDAP_URI=ldap://172.17.0.2:8389                   \
+    LDAP_URI=ldap://06openldap:8389                   \
     LDAP_BIND_DN=cn=admin,o=BMUKK                     \
     LDAP_BASE_DN=o=BMUKK                              \
     LDAP_USER_OU=ou=user                              \
