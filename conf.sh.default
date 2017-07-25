@@ -1,33 +1,24 @@
 #!/usr/bin/env bash
 
-# settings for docker build, run and exec
-
 main() {
     SCRIPTDIR=$(cd $(dirname $BASH_SOURCE[0]) && pwd)
     source $SCRIPTDIR/dscripts/conf_lib.sh  # load library functions
-
+    configlib_version=2  # compatible version of conf_lib.sh
+    check_version $configlib_version
+    # do_not_build $@ # uncomment this line to pull/load image
     init_sudo
-    #set_volume_root
-    set_image_and_container_name
-    set_users
-    set_buildargs
-    set_run_args
-    #set_network
-    set_vol_mapping
-    #enable_x11_client
-    #enable_pkcs11
-    #enable_sshd()     # usually used only for debugging - requires installed sshd in image
+    _set_image_and_container_name
+    _set_users
+    _set_buildargs
+    _set_run_args
 }
 
 
-#set_volume_root() {
-#}
-
-
-set_image_and_container_name() {
+_set_image_and_container_name() {
+    IMGID='06'
     PROJSHORT='etl'
-    export IMAGENAME="rschlatterbeck/$PROJSHORT"  # [a-z_0-9]
-    export CONTAINERNAME="$PROJSHORT"
+    export IMAGENAME="rschlatterbeck/${PROJSHORT}${IMGID}"
+    export CONTAINERNAME="${IMGID}$PROJSHORT"
     export DOCKER_REGISTRY=''  # empty for docker.io
     if [[ $JENKINS_HOME ]]; then
         export DOCKER_REGISTRY='localhost:5000'
@@ -35,12 +26,12 @@ set_image_and_container_name() {
 }
 
 
-set_users() {
+_set_users() {
     export START_AS_ROOT=      # 'True' (e.g. for apache to fall back to www user)
 }
 
 
-set_buildargs() {
+_set_buildargs() {
     BUILD_IP=$(ip address ls docker0 | grep -w inet | cut -d ' ' -f6 \
                | cut -d/ -f1)
     export BUILDARGS="--build-arg=BUILD_IP=$BUILD_IP"
@@ -49,26 +40,32 @@ set_buildargs() {
 
 set_run_args() {
     export ENVSETTINGS="
-        --env=ORACLE_SERVICE=PH08.brz \
-        --env=ORACLE_USER=addme \
-        --env=ORACLE_PASSWORD=strenggeheim \
-        --env=ORACLE_HOST=172.18.77.3 \
-        --env=ORACLE_PORT=1521 \
-        --env=TWO_TASK=//172.18.77.3:1521/listener \
-        "
+    --env=ORACLE_USER=addme \
+    --env=ORACLE_HOST=172.18.77.3 \
+    --env=ORACLE_PORT=1521 \
+    --env=TWO_TASK=//172.18.77.3:1521/listener \
+    --env=LDAP_URI=ldap://06openldap:8389                   \
+    --env=LDAP_BIND_DN=cn=admin,o=BMUKK                     \
+    --env=LDAP_BASE_DN=o=BMUKK                              \
+    --env=LDAP_USER_OU=ou=user                              \
+    --env=DATABASE_INSTANCES=ph08:PH08.brz,ph10:PH10.brz,ph15:PH15.brz \
+    "
     export STARTCMD='/bin/bash'  # unset or blank to use image default
+    export NETWORKSETTINGS="--link 06openldap:8389"
 }
 
 
-#set_network() {
-#}
-
-
-set_vol_mapping() {
+setup_vol_mapping() {
     VOLLIST=''
     VOLMAPPING="-v $PWD/passwords:/etc/passwords"
-    # map_host_directory "$PWD" '/host_cd/' 'rw'  # on target systems with dockerd --selinux-enable map dedicated volume
 }
 
 
-main
+container_status() {
+    $sudo docker ps | head -1
+    $sudo docker ps --all | egrep $CONTAINERNAME\$
+    $sudo docker exec -it $CONTAINERNAME /status.sh
+}
+
+
+main $@
