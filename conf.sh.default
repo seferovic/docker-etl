@@ -1,30 +1,24 @@
 #!/usr/bin/env bash
 
-# settings for docker build, run and exec
-
 main() {
     SCRIPTDIR=$(cd $(dirname $BASH_SOURCE[0]) && pwd)
     source $SCRIPTDIR/dscripts/conf_lib.sh  # load library functions
-
+    configlib_version=2  # compatible version of conf_lib.sh
+    check_version $configlib_version
     init_sudo
-    #set_volume_root
-    set_image_and_container_name
-    set_users
-    set_buildargs
-    set_run_args
-    #set_network
-    set_vol_mapping
-    #enable_x11_client
-    #enable_pkcs11
-    #enable_sshd()     # usually used only for debugging - requires installed sshd in image
+    _set_volume_root
+    _set_image_and_container_name
+    _set_users
+    _set_buildargs
+    _set_run_args
 }
 
 
-#set_volume_root() {
+#_set_volume_root() {
 #}
 
 
-set_image_and_container_name() {
+_set_image_and_container_name() {
     PROJSHORT='etl'
     export IMAGENAME="rschlatterbeck/$PROJSHORT"  # [a-z_0-9]
     export CONTAINERNAME="$PROJSHORT"
@@ -35,19 +29,19 @@ set_image_and_container_name() {
 }
 
 
-set_users() {
+_set_users() {
     export START_AS_ROOT=      # 'True' (e.g. for apache to fall back to www user)
 }
 
 
-set_buildargs() {
+_set_buildargs() {
     BUILD_IP=$(ip address ls docker0 | grep -w inet | cut -d ' ' -f6 \
                | cut -d/ -f1)
     export BUILDARGS="--build-arg=BUILD_IP=$BUILD_IP"
 }
 
 
-set_run_args() {
+_set_run_args() {
     export ENVSETTINGS="
         --env=ORACLE_SERVICE=PH08.brz \
         --env=ORACLE_USER=addme \
@@ -60,11 +54,13 @@ set_run_args() {
 }
 
 
-#set_network() {
-#}
+create_intercontainer_network() {
+    export NETWORKSETTINGS=""
+}
 
 
-set_vol_mapping() {
+setup_vol_mapping() {
+    mode=$1  # create (used by run.sh)/list (used by manage.sh)
     VOLLIST=''
     VOLMAPPING="-v $PWD/passwords:/etc/passwords"
     # map_host_directory "$PWD" '/host_cd/' 'rw'  # on target systems with dockerd --selinux-enable map dedicated volume
