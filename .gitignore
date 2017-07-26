@@ -3,3 +3,4 @@
 conf*.sh
 oracle-instantclient*
 http-server.pid
+passwords

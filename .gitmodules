@@ -6,4 +6,4 @@
 	url = https://github.com/edushare-at/py-etl
 [submodule "odbc-drivers"]
 	path = odbc-drivers
-	url = ./odbc-drivers
+	url = https://github.com/edushare-at/odbc-drivers.git
