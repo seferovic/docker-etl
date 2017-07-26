@@ -27,6 +27,7 @@ RUN \
  && yum -y install gcc gcc-c++ unixODBC-devel \
  && pip3 install ldap3 \
  && pip3 install pyodbc \
+ && pip3 install pytz \
  && yum -y erase gcc gcc-c++ unixODBC-devel cpp glibc-devel glibc-headers \
     kernel-headers libgomp libmpc libstdc++-devel mpfr \
  && echo "TLS_REQCERT allow" >> /etc/openldap/ldap.conf
