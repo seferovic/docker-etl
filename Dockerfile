@@ -19,7 +19,7 @@ ARG BUILD_IP
 RUN \
  for f in oracle-instantclient12.2-basic-12.2.0.1.0-1.x86_64.rpm \
   oracle-instantclient12.2-odbc-12.2.0.1.0-1.x86_64.rpm ; do \
-    curl -s -o /tmp/$f http://$BUILD_IP:8000/$f ; \
+    curl -s -o /tmp/$f http://$BUILD_IP:8000/odbc-drivers/$f ; \
  done \
  && rpm -ivh /tmp/oracle-instantclient12.2-basic-12.2.0.1.0-1.x86_64.rpm \
  && rpm -ivh /tmp/oracle-instantclient12.2-odbc-12.2.0.1.0-1.x86_64.rpm  \

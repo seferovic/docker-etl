@@ -12,6 +12,9 @@ downloaded from Oracle::
  oracle-instantclient12.2-basic-12.2.0.1.0-1.x86_64.rpm
  oracle-instantclient12.2-odbc-12.2.0.1.0-1.x86_64.rpm
 
+We've put them in a submodule, if you don't have access to that git repo,
+you still need to download them into the subdirectory ``odbc-drivers``.
+
 Configuration
 -------------
 

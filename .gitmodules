@@ -4,3 +4,6 @@
 [submodule "py-etl"]
 	path = py-etl
 	url = https://github.com/edushare-at/py-etl
+[submodule "odbc-drivers"]
+	path = odbc-drivers
+	url = ./odbc-drivers
