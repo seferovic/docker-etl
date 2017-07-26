@@ -51,7 +51,7 @@ _set_run_args() {
     --env=DATABASE_INSTANCES=ph08:PH08.brz,ph10:PH10.brz,ph15:PH15.brz \
     "
     export STARTCMD='/bin/bash'  # unset or blank to use image default
-    export NETWORKSETTINGS="--link 06openldap:8389"
+    export NETWORKSETTINGS="--link 06openldap"
 }
 
 
