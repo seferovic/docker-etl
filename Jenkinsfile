@@ -79,22 +79,13 @@ pipeline {
                 # ETL container start (and loading initial data)
                 ./dscripts/run.sh -I /opt/bin/testdriver.py initial_load
                 ./dscripts/run.sh -I /opt/bin/etl.py -c postgres          \
+                    -i 00000000000000000000000000000000                   \
                     -d ou=user,ou=ph08,o=BMUKK initial_load
                 ./dscripts/run.sh /opt/bin/etl.py -c postgres             \
+                    -i 00000000000000000000000000000000                   \
                     -d ou=user,ou=ph08,o=BMUKK etl
                 '''
-                sh '''
-                ./dscripts/exec.sh -I /opt/bin/ldaptest.py -2 iter |      \
-                    diff - /opt/bin/testdata/ldap00.txt
-                '''
-                sh '''
-                for test in 01 02 03 04 05 06 07 ; do
-                  ./dscripts/exec.sh -I /opt/bin/testdriver.py -A $test update
-                  ./dscripts/exec.sh -I /opt/bin/testdriver.py wait_for_sync
-                    ./dscripts/exec.sh -I /opt/bin/ldaptest.py -2 iter |   \
-                        diff - /opt/bin/testdata/ldap$test.txt
-                done
-                '''
+                sh './dscripts/exec.sh -I /opt/bin/test-compare'
             }
         }
         stage('Push to Registry') {

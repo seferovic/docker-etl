@@ -10,6 +10,7 @@ RUN yum -y update \
  && yum -y install openldap-clients \
  && yum -y install python34-jinja2 \
  && yum -y install postgresql-odbc \
+ && yum -y install python34-crypto \
  && yum -y install less telnet \
  && curl https://bootstrap.pypa.io/get-pip.py | python3.4
 
