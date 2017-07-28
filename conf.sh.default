@@ -15,9 +15,9 @@ main() {
 
 
 _set_image_and_container_name() {
-    IMGID='06'
+    IMGID='44'
     PROJSHORT='etl'
-    export IMAGENAME="rschlatterbeck/${PROJSHORT}${IMGID}"
+    export IMAGENAME="idn/${PROJSHORT}${IMGID}"
     export CONTAINERNAME="${IMGID}$PROJSHORT"
     export DOCKER_REGISTRY=''  # empty for docker.io
     if [[ $JENKINS_HOME ]]; then
@@ -44,11 +44,11 @@ _set_run_args() {
     --env=ORACLE_HOST=172.18.77.3 \
     --env=ORACLE_PORT=1521 \
     --env=TWO_TASK=//172.18.77.3:1521/listener \
-    --env=LDAP_URI=ldap://06openldap:8389                   \
+    --env=LDAP_URI=ldap://16openldap:8389                   \
     --env=LDAP_BIND_DN=cn=admin,o=BMUKK                     \
     --env=LDAP_BASE_DN=o=BMUKK                              \
     --env=LDAP_USER_OU=ou=user                              \
-    --env=ETL_SLEEPTIME=25                                  \
+    --env=ETL_SLEEPTIME=1                                   \
     --env=DATABASE_INSTANCES=ph08:PH08.brz,ph10:PH10.brz,ph15:PH15.brz \
     "
     export STARTCMD='/bin/bash'  # unset or blank to use image default
@@ -56,8 +56,7 @@ _set_run_args() {
 
 
 create_intercontainer_network() {
-    #export NETWORKSETTINGS="--link 06openldap --link test-postgres"
-    export NETWORKSETTINGS=""
+    export NETWORKSETTINGS="--link 16openldap --link test-postgres"
 }
 
 
