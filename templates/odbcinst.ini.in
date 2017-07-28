@@ -4,6 +4,14 @@ Driver = /usr/lib/oracle/12.2/client64/lib/libsqora.so.12.1
 FileUsage = 1
 Driver Logging = 7
 
+[postgresql]
+Description = PostgreSQL ODBC driver
+Driver = /usr/lib64/psqlodbc.so
+Setup = /usr/lib64/psqlodbcw.so
+Debug = 0
+CommLog = 1
+UsageCount = 2
+
 [odbc]
 Trace = No
 Tracefile = /tmp/oracletrace

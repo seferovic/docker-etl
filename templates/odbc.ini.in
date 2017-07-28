@@ -7,3 +7,14 @@ UserID = {{ ORACLE_USER }}
 Password = {{ DATABASE_PASSWORDS [DB] }}
 
 {% endfor %}
+
+[postgres]
+Driver = postgresql
+Description = PostgreSQL Data Source
+Servername = test-postgres
+Port = 5432
+Protocol = 9.1
+UserName = postgres
+Password = secret
+Database = etltest
+

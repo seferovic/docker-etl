@@ -48,14 +48,15 @@ _set_run_args() {
     --env=LDAP_BIND_DN=cn=admin,o=BMUKK                     \
     --env=LDAP_BASE_DN=o=BMUKK                              \
     --env=LDAP_USER_OU=ou=user                              \
+    --env=ETL_SLEEPTIME=25                                  \
     --env=DATABASE_INSTANCES=ph08:PH08.brz,ph10:PH10.brz,ph15:PH15.brz \
     "
     export STARTCMD='/bin/bash'  # unset or blank to use image default
-    export NETWORKSETTINGS="--link 06openldap"
 }
 
 
 create_intercontainer_network() {
+    #export NETWORKSETTINGS="--link 06openldap --link test-postgres"
     export NETWORKSETTINGS=""
 }
 

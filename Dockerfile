@@ -25,6 +25,7 @@ RUN \
  && rm -f /tmp/oracle* \
  && mkdir /etc/oracle  \
  && yum -y install gcc gcc-c++ unixODBC-devel \
+ && pip3 install pyasn1==0.2.3 \
  && pip3 install ldap3 \
  && pip3 install pyodbc \
  && pip3 install pytz \
@@ -52,6 +53,8 @@ ENV ORACLE_HOME=/usr/lib/oracle/12.2/client64         \
     LDAP_USER_OU=ou=user                              \
     PYTHONIOENCODING=utf-8:backslashreplace           \
     NLS_LANG=GERMAN_GERMANY.AL32UTF8                  \
+    ETL_SLEEPTIME=25                                  \
+    LESSCHARSET=utf-8                                 \
     DATABASE_INSTANCES=ph06:PH06.brz,ph08:PH08.brz,ph10:PH10.brz,ph15:PH15.brz
 
 
