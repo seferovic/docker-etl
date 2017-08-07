@@ -62,7 +62,7 @@ ENV ORACLE_HOME=/usr/lib/oracle/12.2/client64         \
     NLS_LANG=GERMAN_GERMANY.AL32UTF8                  \
     ETL_SLEEPTIME=25                                  \
     LESSCHARSET=utf-8                                 \
-    ETL_COMMAND="/opt/bin/etl.py initial_load"        \
+    ETL_COMMAND=""                                    \
     DATABASE_INSTANCES=ph06:PH06.brz,ph08:PH08.brz,ph10:PH10.brz,ph15:PH15.brz
 
 
@@ -72,7 +72,10 @@ ENV USERNAME=default  \
 RUN groupadd --non-unique -g $CONTAINERGID $USERNAME \
  && useradd  --non-unique --gid $CONTAINERGID --uid $CONTAINERUID $USERNAME
 
-#USER $USERNAME
+# "Random" Userid not $CONTAINERUID above
+USER 100000
 
 ENTRYPOINT [ "/bin/startup" ]
-#CMD [ "/opt/bin/etl.py", "initial_load" ]
+# Note that the command-line is overridden by ETL_COMMAND if this
+# environment-variable is non-empty.
+CMD [ "/opt/bin/etl.py", "initial_load" ]

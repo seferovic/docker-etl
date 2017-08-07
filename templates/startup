@@ -54,13 +54,16 @@ for fn in files :
         tpl = env.get_template (tplname)
         f.write (tpl.render ())
 
+# Default is initial_load (which doesn't write to the database)
 cmd = '/opt/bin/etl.py'
 arg = ['initial_load']
+# ETL_COMMAND if set and non-empty wins over command-line args.
+# This is done to make it easier to run different commands in OpenShift.
 if os.environ.get ('ETL_COMMAND', '') :
     cmds = os.environ ['ETL_COMMAND'].split (' ')
     cmd  = cmds [0]
     arg  = cmds [1:]
-if len (sys.argv) > 1 :
+elif len (sys.argv) > 1 :
     cmd = sys.argv [1]
     arg = sys.argv [2:]
 arg0 = os.path.basename (cmd)
