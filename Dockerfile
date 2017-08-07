@@ -32,7 +32,13 @@ RUN \
  && pip3 install pytz \
  && yum -y erase gcc gcc-c++ unixODBC-devel cpp glibc-devel glibc-headers \
     kernel-headers libgomp libmpc libstdc++-devel mpfr \
- && echo "TLS_REQCERT allow" >> /etc/openldap/ldap.conf
+ && echo "TLS_REQCERT allow" >> /etc/openldap/ldap.conf \
+ && rm -f /etc/odbc* \
+ && mkdir /etc/dynamic \
+ && chmod 777 /etc/dynamic \
+ && cd /etc && ln -s dynamic/odbc.ini odbc.ini \
+ && cd /etc && ln -s dynamic/odbcinst.ini odbcinst.ini \
+ && cd /etc/oracle && ln -s ../dynamic/tnsnames.ora tnsnames.ora
 
 COPY templates/odbc.ini.in templates/odbcinst.ini.in \
     templates/tnsnames.ora.in /etc/templates/

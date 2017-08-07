@@ -38,7 +38,15 @@ with open ('/etc/passwords', 'r') as pw :
         else :
             env.globals [k] = v
 
-files = ('/etc/oracle/tnsnames.ora', '/etc/odbcinst.ini', '/etc/odbc.ini')
+# Create all files in /etc/dynamic, this directory is writeable by
+# whatever user the dynamic runtime will assign to the container.
+# We use symlinks created during container creation (see Dockerfile)
+# to point to the relevant dynamically-generated files in /etc/dynamic
+files = \
+    ( '/etc/dynamic/tnsnames.ora'
+    , '/etc/dynamic/odbcinst.ini'
+    , '/etc/dynamic/odbc.ini'
+    )
 
 for fn in files :
     tplname = os.path.basename (fn) + '.in'
