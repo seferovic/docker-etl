@@ -105,6 +105,7 @@ pipeline {
             sh '''
             sudo docker rm -f test-postgres
             sudo docker rm -f 16openldap
+            sudo docker volume rm 16openldap.db
             '''
         }
     }
