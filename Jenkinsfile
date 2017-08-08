@@ -2,7 +2,7 @@ pipeline {
     agent any
 
     stages {
-        stage('ETD: get remote repo') {
+        stage('ETL: get remote repo') {
             steps {
                 sh '''
                 printenv
@@ -15,7 +15,7 @@ pipeline {
                 '''
             }
         }
-        stage('ETD: docker cleanup') {
+        stage('ETL: docker cleanup') {
             steps {
                 sh './dscripts/manage.sh rm 2>/dev/null || true'
                 sh './dscripts/manage.sh rmvol 2>/dev/null || true'
@@ -24,7 +24,7 @@ pipeline {
                 sh 'sudo docker ps --all'
             }
         }
-        stage('ETD: Build') {
+        stage('ETL: Build') {
             steps {
                 sh '''
                 echo 'Building..'
