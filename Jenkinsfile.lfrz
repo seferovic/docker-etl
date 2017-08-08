@@ -27,6 +27,7 @@ pipeline {
                 sh './dscripts/manage.sh rmvol 2>/dev/null || true'
                 sh 'sudo docker rm -f test-postgres || true'
                 sh 'sudo docker rm -f 16openldap || true'
+                sh 'sudo docker volume rm 16openldap.db || true'
                 sh 'sudo docker ps --all'
             }
         }
