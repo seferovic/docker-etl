@@ -79,6 +79,9 @@ pipeline {
                 ./dscripts/run.sh -I /opt/bin/testdriver.py initial_load
                 ./dscripts/run.sh -I /opt/bin/etl.py -c postgres          \
                     -i 00000000000000000000000000000000 -t                \
+                    -d ou=user,ou=ph10,o=BMUKK initial_load
+                ./dscripts/run.sh -I /opt/bin/etl.py -c postgres          \
+                    -i 00000000000000000000000000000000 -t                \
                     -d ou=user,ou=ph08,o=BMUKK initial_load
                 ./dscripts/run.sh /opt/bin/etl.py -c postgres             \
                     -i 00000000000000000000000000000000                   \
