@@ -1,42 +1,37 @@
 #!/usr/bin/env bash
 
-# settings for docker build, run and exec
-
 main() {
     SCRIPTDIR=$(cd $(dirname $BASH_SOURCE[0]) && pwd)
     source $SCRIPTDIR/dscripts/conf_lib.sh  # load library functions
-
+    configlib_version=2  # compatible version of conf_lib.sh
+    check_version $configlib_version
+    # do_not_build $@ # uncomment this line to pull/load image
     init_sudo
-    #set_volume_root
-    set_image_and_container_name
-    set_users
-    set_buildargs
-    set_run_args
-    #set_network
-    set_vol_mapping
-    #enable_x11_client
-    #enable_pkcs11
-    #enable_sshd()     # usually used only for debugging - requires installed sshd in image
+    _set_image_and_container_name
+    _set_users
+    _set_buildargs
+    _set_run_args
 }
 
 
-#set_volume_root() {
-#}
-
-
-set_image_and_container_name() {
+_set_image_and_container_name() {
+    IMGID='44'
     PROJSHORT='etl'
-    export IMAGENAME="rschlatterbeck/$PROJSHORT"  # [a-z_0-9]
-    export CONTAINERNAME="$PROJSHORT"
+    export IMAGENAME="idn/${PROJSHORT}${IMGID}"
+    export CONTAINERNAME="${IMGID}$PROJSHORT"
+    export DOCKER_REGISTRY=''  # empty for docker.io
+    if [[ $JENKINS_HOME ]]; then
+        export DOCKER_REGISTRY='localhost:5000'
+    fi
 }
 
 
-set_users() {
+_set_users() {
     export START_AS_ROOT=      # 'True' (e.g. for apache to fall back to www user)
 }
 
 
-set_buildargs() {
+_set_buildargs() {
     BUILD_IP=$(ip address ls docker0 | grep -w inet | cut -d ' ' -f6 \
                | cut -d/ -f1)
     export BUILDARGS="--build-arg=BUILD_IP=$BUILD_IP \
@@ -52,7 +47,7 @@ set_buildargs() {
 }
 
 
-set_run_args() {
+_set_run_args() {
     export ENVSETTINGS="\
     --env=http_proxy=http://proxy.lfrz.at:8080 \
     --env=HTTP_PROXY=http://proxy.lfrz.at:8080 \
@@ -62,26 +57,38 @@ set_run_args() {
     --env=HTTPS_PROXY=http://proxy.lfrz.at:8080 \
     --env=no_proxy=.lfrz.gv.at,.lfrz.at,.vie01.local \
     --env=NO_PROXY=.lfrz.gv.at,.lfrz.at,.vie01.local \
-    --env=ORACLE_SERVICE=PH08.brz \
     --env=ORACLE_USER=addme \
-    --env=ORACLE_PASSWORD=strenggeheim \
     --env=ORACLE_HOST=172.18.77.3 \
     --env=ORACLE_PORT=1521 \
     --env=TWO_TASK=//172.18.77.3:1521/listener \
+    --env=LDAP_URI=ldap://16openldap:8389                   \
+    --env=LDAP_BIND_DN=cn=admin,o=BMUKK                     \
+    --env=LDAP_BASE_DN=o=BMUKK                              \
+    --env=LDAP_USER_OU=ou=user                              \
+    --env=ETL_SLEEPTIME=1                                   \
+    --env=DATABASE_INSTANCES=ph08:PH08.brz,ph10:PH10.brz,ph15:PH15.brz \
     "
     export STARTCMD='/bin/bash'  # unset or blank to use image default
 }
 
 
-#set_network() {
-#}
-
-
-set_vol_mapping() {
-    VOLLIST=''
-    VOLMAPPING=''
-    # map_host_directory "$PWD" '/host_cd/' 'rw'  # on target systems with dockerd --selinux-enable map dedicated volume
+create_intercontainer_network() {
+    export NETWORKSETTINGS="--link 16openldap"
 }
 
 
-main
+setup_vol_mapping() {
+    mode=$1  # create (used by run.sh)/list (used by manage.sh)
+    VOLLIST=''
+    VOLMAPPING="-v $PWD/passwords:/etc/conf/passwords"
+}
+
+
+container_status() {
+    $sudo docker ps | head -1
+    $sudo docker ps --all | egrep $CONTAINERNAME\$
+    $sudo docker exec -it $CONTAINERNAME /status.sh
+}
+
+
+main $@

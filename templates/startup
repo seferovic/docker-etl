@@ -22,8 +22,8 @@ for db in os.environ ['DATABASE_INSTANCES'].split (',') :
     inst [k] = v
 env.globals ['DATABASE_INSTANCES'] = inst
 
-# Get passwords from /etc/passwords passed in via link-mount
-with open ('/etc/passwords', 'r') as pw :
+# Get passwords from /etc/conf/passwords passed in via link-mount
+with open ('/etc/conf/passwords', 'r') as pw :
     for line in pw :
         line = line.strip ()
         if not line or line.startswith ('#') :

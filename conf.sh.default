@@ -63,7 +63,7 @@ create_intercontainer_network() {
 setup_vol_mapping() {
     mode=$1  # create (used by run.sh)/list (used by manage.sh)
     VOLLIST=''
-    VOLMAPPING="-v $PWD/passwords:/etc/passwords"
+    VOLMAPPING="-v $PWD/passwords:/etc/conf/passwords"
 }
 
 

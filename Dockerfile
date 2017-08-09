@@ -38,7 +38,8 @@ RUN \
  && chmod 777 /etc/dynamic \
  && cd /etc && ln -s dynamic/odbc.ini odbc.ini \
  && cd /etc && ln -s dynamic/odbcinst.ini odbcinst.ini \
- && cd /etc/oracle && ln -s ../dynamic/tnsnames.ora tnsnames.ora
+ && cd /etc/oracle && ln -s ../dynamic/tnsnames.ora tnsnames.ora \
+ && mkdir /etc/conf && ln -s /etc/conf/passwords /etc/passwords
 
 COPY templates/odbc.ini.in templates/odbcinst.ini.in \
     templates/tnsnames.ora.in /etc/templates/
@@ -71,6 +72,10 @@ ENV USERNAME=default  \
     CONTAINERGID=1000
 RUN groupadd --non-unique -g $CONTAINERGID $USERNAME \
  && useradd  --non-unique --gid $CONTAINERGID --uid $CONTAINERUID $USERNAME
+
+# Note: We need the simple file 'passwords' but the /etc/conf directory
+# is empty so that OpenShift can safely map the whole directory.
+VOLUME /etc/conf/passwords ### LFRZ - ConfigMap Volume
 
 # "Random" Userid not $CONTAINERUID above
 USER 100000
