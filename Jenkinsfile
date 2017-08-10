@@ -55,7 +55,8 @@ pipeline {
                     -e ROOTPW=changeit -e USERNAME=slapd -e SLAPDHOST=0.0.0.0 \
                     -e DEBUGLEVEL=conns,config,stats                          \
                     -v 16openldap.db:/var/db:Z                                \
-                    -v 16openldap.etc:/etc/openldap:Z idn/openldap06          \
+                    -v 16openldap.etc:/etc/openldap:Z                         \
+                    -v 16openldap.conf:/etc/conf:Z idn/openldap06             \
                     /tests/init_sample_config_phoAt.sh
 
                 sudo docker run -d --restart=unless-stopped                    \
@@ -64,7 +65,8 @@ pipeline {
                     -e ROOTPW=changeit -e USERNAME=slapd -e SLAPDHOST=0.0.0.0  \
                     -e DEBUGLEVEL=conns,config,stats                           \
                     -v 16openldap.db:/var/db:Z                                 \
-                    -v 16openldap.etc:/etc/openldap:Z idn/openldap06
+                    -v 16openldap.etc:/etc/openldap:Z                          \
+                    -v 16openldap.conf:/etc/conf:Z idn/openldap06
                 sudo docker ps
                 '''
             }
