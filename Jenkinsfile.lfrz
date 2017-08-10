@@ -4,7 +4,7 @@ pipeline {
     environment {
         http_proxy='http://proxy.lfrz.at:8080'
         https_proxy='http://proxy.lfrz.at:8080'
-        no_proxy='127.0.0.1,localhost,*.vie01.local'
+        no_proxy='127.0.0.1,localhost,*.vie01.local,172.17.0.1'
     }
 
     stages {
