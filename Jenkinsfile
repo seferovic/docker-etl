@@ -65,6 +65,7 @@ pipeline {
                     -e DEBUGLEVEL=conns,config,stats                           \
                     -v 16openldap.db:/var/db:Z                                 \
                     -v 16openldap.etc:/etc/openldap:Z idn/openldap06
+                sudo docker ps
                 '''
             }
         }
