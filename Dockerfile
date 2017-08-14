@@ -75,7 +75,8 @@ RUN groupadd --non-unique -g $CONTAINERGID $USERNAME \
 
 # Note: We need the simple file 'passwords' but the /etc/conf directory
 # is empty so that OpenShift can safely map the whole directory.
-VOLUME /etc/conf ### LFRZ - ConfigMap Volume
+### LFRZ - ConfigMap Volume
+VOLUME /etc/conf
 
 # "Random" Userid not $CONTAINERUID above
 USER 100000
