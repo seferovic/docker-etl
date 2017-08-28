@@ -43,7 +43,7 @@ where in the LDAP DIT the users for ph08 are stored under::
 
  ou=user,ou=ph08,o=BMUKK
 
-Note: The ``ph00`` in ou=ph08 must match the instance name ``ph08`` in
+Note: The ``ph08`` in ou=ph08 must match the instance name ``ph08`` in
 the ``DATABASE_INSTANCES`` configuration.
 
 
@@ -60,3 +60,21 @@ database instance and pw1 is the associated password for this instance.
 An example would be::
 
  DATABASE_INSTANCES=ph06:strenggeheim6,ph08:strenggeheim8
+
+The password for binding to the LDAP directory is configured via the
+environment variable ``LDAP_PASSWORD``, e.g.::
+
+ LDAP_PASSWORD=changeme
+
+For encryption of the passwords in the idnDistributionPassword
+attribute, the variable ``PASSWORD_ENCRYPTION_PASSWORD`` is used, e.g.::
+
+ PASSWORD_ENCRYPTION_PASSWORD=changemetoo*****
+
+This password needs to be exactly 16 characters long (including
+conversion from unicode to UTF-8 multibyte encoding if accented
+characters are used).  Passwords are encrypted and then hex-encoded
+stored in LDAP, for details of the encryption see the ``README` in the
+``py-etl`` submodule. Note that the ETD application needs the same
+password configured to be able to synchronize passwords to the PH Active
+Directory instances.
