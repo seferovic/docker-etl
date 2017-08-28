@@ -2,10 +2,10 @@ pipeline {
     agent any
 
     stages {
-        stage('ETL: get remote repo') {
+        /*stage('ETL: get remote repo') {
             steps {
                 sh '''
-                printenv
+                printenv | grep -i proxy | sort
                 echo 'hard coding git branch - TODO: move this to the jenkins git plugin'
                 git checkout master
                 echo 'pulling updates'
@@ -14,7 +14,7 @@ pipeline {
                 cd ./dscripts && git checkout master && git pull && cd ..
                 '''
             }
-        }
+        }*/
         stage('ETL: docker cleanup') {
             steps {
                 sh './dscripts/manage.sh rm 2>/dev/null || true'
@@ -31,7 +31,7 @@ pipeline {
                 echo 'Building..'
                 rm conf.sh 2> /dev/null || true
                 ln -s conf.sh.default conf.sh
-                ./dscripts/build.sh
+                ./dscripts/build.sh -p
                 '''
             }
         }
@@ -91,13 +91,6 @@ pipeline {
                     -d ou=user,ou=ph08,o=BMUKK etl
                 '''
                 sh './dscripts/exec.sh -I /opt/bin/test-compare'
-            }
-        }
-        stage('Push to Registry') {
-            steps {
-                sh '''
-                ./dscripts/manage.sh push
-                '''
             }
         }
     }

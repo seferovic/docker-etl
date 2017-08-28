@@ -1,5 +1,7 @@
-FROM centos:centos7
+FROM rhel7
 MAINTAINER Ralf Schlatterbeck <rsc@runtux.com>
+
+# Generic Python3.4 image
 
 RUN yum -y update \
  && yum -y install epel-release \
@@ -9,18 +11,18 @@ RUN yum -y update \
  && yum -y install python34-jinja2 \
  && yum -y install postgresql-odbc \
  && yum -y install python34-crypto \
- && yum -y install less telnet \
- && curl https://bootstrap.pypa.io/get-pip.py | python3.4
+ && yum -y install less telnet
+RUN curl https://bootstrap.pypa.io/get-pip.py | python3.4
 
 ARG BUILD_IP
-ARG BUILD_PORT
 
-RUN \
- for f in oracle-instantclient12.2-basic-12.2.0.1.0-1.x86_64.rpm \
-  oracle-instantclient12.2-odbc-12.2.0.1.0-1.x86_64.rpm ; do \
-    curl -s -o /tmp/$f http://$BUILD_IP:$BUILD_PORT/odbc-drivers/$f ; \
- done \
- && rpm -ivh /tmp/oracle-instantclient12.2-basic-12.2.0.1.0-1.x86_64.rpm \
+#RUN \
+ #for f in oracle-instantclient12.2-basic-12.2.0.1.0-1.x86_64.rpm \
+ # oracle-instantclient12.2-odbc-12.2.0.1.0-1.x86_64.rpm ; do \
+ #   curl -s -o /tmp/$f http://$BUILD_IP:8000/odbc-drivers/$f ; \
+ #done \
+COPY odbc-drivers/* /tmp/
+RUN rpm -ivh /tmp/oracle-instantclient12.2-basic-12.2.0.1.0-1.x86_64.rpm \
  && rpm -ivh /tmp/oracle-instantclient12.2-odbc-12.2.0.1.0-1.x86_64.rpm  \
  && rm -f /tmp/oracle* \
  && mkdir /etc/oracle  \
@@ -84,4 +86,3 @@ ENTRYPOINT [ "/bin/startup" ]
 # Note that the command-line is overridden by ETL_COMMAND if this
 # environment-variable is non-empty.
 CMD [ "/opt/bin/etl.py", "initial_load" ]
-COPY LASTBUILD /opt/etc/LASTBUILD

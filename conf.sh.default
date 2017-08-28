@@ -32,24 +32,27 @@ _set_users() {
 
 
 _set_buildargs() {
-    BUILD_IP=$(ip address ls docker0 | grep -w inet | cut -d ' ' -f6 \
-               | cut -d/ -f1)
-    export BUILDARGS="--build-arg=BUILD_IP=$BUILD_IP"
+    BUILD_IP=$(ip address ls docker0 | grep -w inet | cut -d ' ' -f6  | cut -d/ -f1)
+    export BUILD_PORT=8001
+    export BUILDARGS="
+        --build-arg=BUILD_IP=$BUILD_IP
+        --build-arg=BUILD_PORT=$BUILD_PORT
+    "
 }
 
 
 _set_run_args() {
     export ENVSETTINGS="
-    --env=ORACLE_USER=addme \
-    --env=ORACLE_HOST=172.18.77.3 \
-    --env=ORACLE_PORT=1521 \
-    --env=TWO_TASK=//172.18.77.3:1521/listener \
-    --env=LDAP_URI=ldap://16openldap:8389                   \
-    --env=LDAP_BIND_DN=cn=admin,o=BMUKK                     \
-    --env=LDAP_BASE_DN=o=BMUKK                              \
-    --env=LDAP_USER_OU=ou=user                              \
-    --env=ETL_SLEEPTIME=1                                   \
-    --env=DATABASE_INSTANCES=ph08:PH08.brz,ph10:PH10.brz,ph15:PH15.brz \
+    --env=ORACLE_USER=addme
+    --env=ORACLE_HOST=172.18.77.3
+    --env=ORACLE_PORT=1521
+    --env=TWO_TASK=//172.18.77.3:1521/listener
+    --env=LDAP_URI=ldap://16openldap:8389
+    --env=LDAP_BIND_DN=cn=admin,o=BMUKK
+    --env=LDAP_BASE_DN=o=BMUKK
+    --env=LDAP_USER_OU=ou=user
+    --env=ETL_SLEEPTIME=1
+    --env=DATABASE_INSTANCES=ph08:PH08.brz,ph10:PH10.brz,ph15:PH15.brz
     "
     export STARTCMD='/bin/bash'  # unset or blank to use image default
 }
