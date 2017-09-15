@@ -21,7 +21,10 @@ pipeline {
                 sh './dscripts/manage.sh rmvol 2>/dev/null || true'
                 sh 'sudo docker rm -f test-postgres || true'
                 sh 'sudo docker rm -f 16openldap || true'
-                sh 'sudo docker volume rm 16openldap.db || true'
+                sh 'sudo docker volume rm 16openldap.conf || true'
+                sh 'sudo docker volume rm 16openldap.etc  || true'
+                sh 'sudo docker volume rm 16openldap.log  || true'
+                sh 'sudo docker volume rm 16openldap.db   || true'
                 sh 'sudo docker ps --all'
             }
         }
@@ -99,6 +102,9 @@ pipeline {
             sh '''
             sudo docker rm -f test-postgres
             sudo docker rm -f 16openldap
+            sudo docker volume rm 16openldap.conf
+            sudo docker volume rm 16openldap.etc
+            sudo docker volume rm 16openldap.log
             sudo docker volume rm 16openldap.db
             '''
         }
