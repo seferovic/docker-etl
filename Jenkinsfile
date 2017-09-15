@@ -56,7 +56,7 @@ pipeline {
                     -e DEBUGLEVEL=conns,config,stats                           \
                     -v 16openldap.db:/var/db:Z                                 \
                     -v 16openldap.etc:/etc/openldap:Z                          \
-                    -v 16openldap.conf:/etc/conf:Z idn/openldap16
+                    -v 16openldap.conf:/etc/conf:Z idn/openldap06
                 sudo docker ps
                 sleep 5
                 sudo docker exec -i 16openldap                                \
