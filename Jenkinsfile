@@ -58,6 +58,7 @@ pipeline {
                     -v 16openldap.etc:/etc/openldap:Z                          \
                     -v 16openldap.conf:/etc/conf:Z idn/openldap16
                 sudo docker ps
+                sleep 5
                 sudo docker exec -i 16openldap                                \
                     /opt/init/openldap/scripts/setupPhoAt.sh
 
