@@ -81,7 +81,7 @@ pipeline {
                     -i 00000000000000000000000000000000 -t                \
                     -d ou=user,ou=ph08,o=BMUKK initial_load
                 ./dscripts/run.sh /opt/bin/etl.py -c postgres             \
-                    -i 00000000000000000000000000000000                   \
+                    -i 00000000000000000000000000000000 -t                \
                     -d ou=user,ou=ph08,o=BMUKK -d ou=user,ou=ph15,o=BMUKK etl
                 '''
                 sh './dscripts/exec.sh -I /opt/bin/test-compare'
