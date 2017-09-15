@@ -104,7 +104,6 @@ pipeline {
             sudo docker rm -f 16openldap
             sudo docker volume rm 16openldap.conf
             sudo docker volume rm 16openldap.etc
-            sudo docker volume rm 16openldap.log
             sudo docker volume rm 16openldap.db
             '''
         }
