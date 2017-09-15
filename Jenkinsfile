@@ -49,16 +49,6 @@ pipeline {
                 '''
                 sh '''
                 # OpenLDAP container
-                sudo docker run -i --rm                                       \
-                    --hostname=16openldap --name=16openldap                   \
-                    --label x.service=ldap://16openldap:8389 --cap-drop=all   \
-                    -e ROOTPW=changeit -e USERNAME=slapd -e SLAPDHOST=0.0.0.0 \
-                    -e DEBUGLEVEL=conns,config,stats                          \
-                    -v 16openldap.db:/var/db:Z                                \
-                    -v 16openldap.etc:/etc/openldap:Z                         \
-                    -v 16openldap.conf:/etc/conf:Z idn/openldap06             \
-                    /tests/init_sample_config_phoAt.sh
-
                 sudo docker run -d --restart=unless-stopped                    \
                     --hostname=16openldap --name=16openldap                    \
                     --label x.service=ldap://16openldap:8389 --cap-drop=all    \
@@ -67,6 +57,9 @@ pipeline {
                     -v 16openldap.db:/var/db:Z                                 \
                     -v 16openldap.etc:/etc/openldap:Z                          \
                     -v 16openldap.conf:/etc/conf:Z idn/openldap06
+                sudo docker exec -i 16openldap                                \
+                    /opt/init/openldap/scripts/setupPhoAt.sh
+
                 sudo docker ps
                 '''
             }
