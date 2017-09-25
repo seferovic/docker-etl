@@ -9,7 +9,7 @@ RUN yum -y update \
  && yum -y install python34-jinja2 \
  && yum -y install postgresql-odbc \
  && yum -y install python34-crypto \
- && yum -y install less telnet \
+ && yum -y install less telnet rsync \
  && curl https://bootstrap.pypa.io/get-pip.py | python3.4
 
 ARG BUILD_IP
