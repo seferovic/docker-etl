@@ -38,7 +38,7 @@ pipeline {
                 sh '''
                 echo 'Building..'
                 rm conf.sh 2> /dev/null || true
-                ln -s conf.sh.default conf.sh 
+                ln -s conf.sh.lfrz_mk conf.sh 
                 ./dscripts/build.sh -p
                 '''
             }
@@ -47,12 +47,12 @@ pipeline {
             steps {
                 sh '''
                 # Postgres container
-                sudo docker run --name test-postgres          \
+                sudo docker run --name 16test-postgres          \
                     -e POSTGRES_PASSWORD=secret -d postgres:9
                 sudo docker ps
                 # Wait for postgres to be started
                 sleep 5
-                sudo docker exec test-postgres /bin/su -c     \
+                sudo docker exec 16test-postgres /bin/su -c     \
                     "/usr/bin/createdb etltest" postgres
                 '''
                 sh '''
@@ -105,7 +105,7 @@ pipeline {
             ./dscripts/manage.sh rmvol 2>&1
             '''
             sh '''
-            sudo docker rm -f test-postgres
+            sudo docker rm -f 16test-postgres
             sudo docker rm -f 16openldap
             sudo docker volume rm 16openldap.conf
             sudo docker volume rm 16openldap.etc
