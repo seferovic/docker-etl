@@ -1,5 +1,9 @@
 pipeline {
     agent any
+/***************************************************************
+** Anleitung Anpassung neue Entwicklungsumgebung
+** ..openldap, Nummer ersetzen durch IMGID='..' aus conf.sh
+***************************************************************/
 
     stages {
         /*stage('ETL: get remote repo') {
@@ -15,11 +19,6 @@ pipeline {
                 '''
             }
         }*/
-
-        /* 16openldap nummer 16 aendern
-       2stellig 
-       conf.sh     IMGID='44' aendern
-         */
 
         stage('ETL: docker cleanup') {
             steps {

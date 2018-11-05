@@ -1,0 +1,82 @@
+#!/usr/bin/env bash
+#Anleitung Anpassung neue Entwicklungsumgebung
+#_set_image_and_container_name() {  IMGID='32' Nummer ändern immer 2 Stellen!
+#_set_run_args(), create_intercontainer_network() ..openldap: 2 stellige-Nummer durch Nummer aus IMGID='32' ändern
+main() {
+    SCRIPTDIR=$(cd $(dirname $BASH_SOURCE[0]) && pwd)
+    source $SCRIPTDIR/dscripts/conf_lib.sh  # load library functions
+    configlib_version=2  # compatible version of conf_lib.sh
+    check_version $configlib_version
+    # do_not_build $@ # uncomment this line to pull/load image
+    init_sudo
+    _set_image_and_container_name
+    _set_users
+    _set_buildargs
+    _set_run_args
+}
+
+
+_set_image_and_container_name() {
+    IMGID='16'
+    PROJSHORT='etl'
+    export IMAGENAME="idn/${PROJSHORT}${IMGID}"
+    export CONTAINERNAME="${IMGID}$PROJSHORT"
+    export DOCKER_REGISTRY=''  # empty for docker.io
+    if [[ $JENKINS_HOME ]]; then
+        export DOCKER_REGISTRY='localhost:5000'
+    fi
+}
+
+
+_set_users() {
+    export START_AS_ROOT=      # 'True' (e.g. for apache to fall back to www user)
+}
+
+
+_set_buildargs() {
+    BUILD_IP=$(ip address ls docker0 | grep -w inet | cut -d ' ' -f6  | cut -d/ -f1)
+    export BUILD_PORT=8001
+    export BUILDARGS="
+        --build-arg=BUILD_IP=$BUILD_IP
+        --build-arg=BUILD_PORT=$BUILD_PORT
+    "
+}
+
+
+_set_run_args() {
+    export ENVSETTINGS="
+    --env=ORACLE_USER=addme
+    --env=ORACLE_HOST=172.18.77.3
+    --env=ORACLE_PORT=1521
+    --env=TWO_TASK=//172.18.77.3:1521/listener
+    --env=LDAP_URI=ldap://16openldap:8389
+    --env=LDAP_BIND_DN=cn=admin,o=BMUKK
+    --env=LDAP_BASE_DN=o=BMUKK
+    --env=LDAP_USER_OU=ou=user
+    --env=ETL_SLEEPTIME=1
+    --env=DATABASE_INSTANCES=ph08:PH08.brz,ph10:PH10.brz,ph15:PH15.brz
+    "
+    export STARTCMD='/bin/bash'  # unset or blank to use image default
+}
+
+
+create_intercontainer_network() {
+    export NETWORKSETTINGS="--link 16openldap --link test-postgres"
+}
+
+
+setup_vol_mapping() {
+    mode=$1  # create (used by run.sh)/list (used by manage.sh)
+    VOLLIST=''
+    VOLMAPPING="-v $PWD/passwords:/etc/conf/passwords"
+}
+
+
+container_status() {
+    $sudo docker ps | head -1
+    $sudo docker ps --all | egrep $CONTAINERNAME\$
+    $sudo docker exec -it $CONTAINERNAME /status.sh
+}
+
+
+main $@
